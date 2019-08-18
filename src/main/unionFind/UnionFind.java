@@ -1,6 +1,6 @@
 package unionFind;
 
 public interface UnionFind{
-    boolean connected(int a, int b);
-    void join(int a, int b);
+    boolean find(int a, int b);
+    void union(int a, int b);
 }

@@ -13,13 +13,13 @@ public class QuickFind implements UnionFind {
         }
     }
 
-    @Override
-    public boolean connected(int a, int b){
+    //@Override
+    public boolean find(int a, int b){
         return nodes[a] == nodes[b];
     }
     
-    @Override
-    public void join(int a, int b){
+    //@Override
+    public void union(int a, int b){
         for (int i = 0; i < nodes.length; i++){
             if (nodes[i] == nodes[a]){
                 nodes[i] = nodes[b];
