@@ -4,14 +4,9 @@ public class QuickFind implements UnionFind {
 
     public QuickFind(int size){
         nodes = new int[size];
-        fillnodes();
+        Nodes.fillnodes(nodes);
     }
 
-    private void fillnodes(){
-        for (int i = 0; i < nodes.length; i++){
-            nodes[i] = i;
-        }
-    }
 
     //@Override
     public boolean find(int a, int b){
