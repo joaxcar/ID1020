@@ -7,7 +7,6 @@ public class QuickFind implements UnionFind {
         Nodes.fillnodes(nodes);
     }
 
-
     //@Override
     public boolean find(int a, int b){
         return nodes[a] == nodes[b];
