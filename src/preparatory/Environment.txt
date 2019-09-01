@@ -1,0 +1,6 @@
+Johan Carlsson
+2019-09-01
+
+Assignment 1: Set up a development environment
+I am going to use VIM as a texteditor during the cource. For C development i am using gcc for compiling and lldb for debugging (lldb is the standard debuging tool for C on MacOS). For JAVA I am going to use javac to compile and jdb to debug. Everything will be done from the comand line. To simplify development some automations in VIM are used for automatic compiling when files are written. A terminal mutiplexer (tmux) is used to be able to split the terminal window and get compile errors side by side with the code.
+Git will be used for version controll.
