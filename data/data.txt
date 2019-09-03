@@ -1,0 +1,2 @@
+In many applications there is a need to handle and store sets of data that may vary in size also during the execution. 
+One commonly used technique to build data structures to hold such data sets is to use linked data structures.

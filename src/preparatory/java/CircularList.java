@@ -2,12 +2,8 @@
  * CircularList.java
  * Johan Carlsson
  * Created: 2019-08-30
- * Edited: 2019-09-01
  * 
- * "CircularList" implements a circular list storing integer value swith a base element with value -1.
- * The list stores the values sorted in descending order.
- * Use push to add a value to the list
- * Use pop to pop the first element of the list
+ * Class implements a circular list with a base element with value -1
 */
 
 import java.util.Scanner;
@@ -45,6 +41,7 @@ public class CircularList{
     insert(new Node(value), curNode.prev);
   }
   
+
   // Place Node after a target Node
   private void insert(Node toPlace, Node after){
     toPlace.next = after.next;
@@ -53,16 +50,16 @@ public class CircularList{
     toPlace.next.prev = toPlace;
   }
 
+  // Check if stack is empty
+  public boolean hasNext(){
+    return head.next != head;
+  }
+
   // Pop a value of the stack
   public int pop(){
       int value = head.next.value;
       remove(head.next);
       return value;
-  }
-
-  // Check if stack is empty
-  public boolean hasNext(){
-    return head.next != head;
   }
 
   public Node remove(Node target){
