@@ -2,14 +2,8 @@
  * SingleLinkedList.java
  * Johan Carlsson
  * Created: 2019-08-28
- * Edited: 2019-09-01
  * 
- * "SingleLinkedList" implements a single linked list working as a stack storing integer values.
- * A client can "push" values onto the top of the stack with the method push, and "pop" the top
- * value of the stack with the method pop.
- * The class can be used as a simple priority queue by using the method pushSorted instead of push.
- * The list can be represented as a String by invoking toSting.
- * Use the method hasNext to check if there are values in the list.
+ * Class implements a single linked list as a FIFO with possibility to use as priority que
 */
 
 import java.util.Scanner;
@@ -28,8 +22,7 @@ public class SingleLinkedList{
   Node head;
 
   // Create new instance of SingleLinkedList
-  public SingleLinkedList(){
-  }
+  public SingleLinkedList(){ }
 
   // Push a value onto the stack
   public void push(int value){
@@ -52,17 +45,14 @@ public class SingleLinkedList{
 
   // Push a value into the stack before the first lower value
   public void pushSorted(int value){
-    // Make value head if list is empty
     if(head == null){
       push(value);
     }
     else if(value > head.value){
       push(value);
     }else{
-      // Step through the list to find a lower value, if no lower value is found put it last
       Node curNode = head;
       while(curNode != null){
-        // Check if last value
         if(curNode.next == null){
           insert(new Node(value), curNode);
           break;

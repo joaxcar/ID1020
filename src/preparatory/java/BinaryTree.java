@@ -2,19 +2,14 @@
  * BinaryTree.java
  * Johan Carlsson
  * Created: 2019-08-30
- * Edited: 2019-09-01
  * 
- * Class implementing a binary tree that takes the first int as a root and places the folowint integers
- * that are lower to the left and higher to the right.
- * Use add to add a value.
- * Use search to se if a value is present in the tree
- * Use walkInfix/Prefix/Postfix to walk the tree
+ * Class implementing a binary tree
 */
 
 import java.util.Scanner;
 
 public class BinaryTree{
-  /* Node structure */
+ /* Node structure */
   private class Node{
     Node left;
     Node right;
@@ -59,12 +54,10 @@ public class BinaryTree{
     }
   }
 
-  // Search for a value in the tree
   public boolean search(int key){
     return search(root, key);
   }
 
-  // Recursive search through the tree
   private boolean search(Node root, int key){
     if(root.key == key){
       return true;
@@ -89,29 +82,22 @@ public class BinaryTree{
     walkPostfix(sb, root);
     return sb.toString();
   }
-
-  // Walk tree prefix
   public String walkPrefix(){
     StringBuilder sb = new StringBuilder();
     walkPrefix(sb, root);
     return sb.toString();
   }
-
-  // Walk tree infix
   public String walkInfix(){
     StringBuilder sb = new StringBuilder();
     walkInfix(sb, root);
     return sb.toString();
   }
-
-  // Walk tree postfix
   public String walkPostfix(){
     StringBuilder sb = new StringBuilder();
     walkPostfix(sb, root);
     return sb.toString();
   }
   
-  // recursive walks infix prefix postfix
   private void walkPrefix(StringBuilder sb, Node root){
     sb.append(root.key);
     sb.append(" ");

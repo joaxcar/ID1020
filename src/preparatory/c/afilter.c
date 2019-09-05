@@ -18,6 +18,8 @@ int main(void){
 
   // Infinite loop checking for chars, breaks at EOF
   while(1){
+    // while (c=getChar() != EOF) möjligt men stökigt pga assingment i check.
+    // borde kört på en read föörst och sen en till. Skulle nog va snyggast
     curChar = getchar();
 
     if(curChar == EOF){

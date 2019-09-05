@@ -93,7 +93,7 @@ public class CircularList{
   */
   public static void main(String[] args){
     CircularList list = new CircularList();
-    Scanner in = new Scanner(System.in);
+    Scanner in = new Scanner(System.in, "utf-8");
     while(in.hasNextInt()){
       list.push(in.nextInt());
       System.out.println(list);
