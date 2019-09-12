@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -18,7 +19,7 @@ void readwriteRec() {
     readwriteRec();
     putchar(c);
   }
-  return;
+  return; // not neaded
 }
 
 /* Read from stdin and print to stdout reversed iteratively */

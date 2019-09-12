@@ -14,6 +14,7 @@ public class ReadWrite {
   // Create new ReadWrite object
   public ReadWrite() {}
 
+  // Used to reverse given String
   public String reverse(String str) {
       char[] chrString = str.toCharArray();
       StringBuilder sb = new StringBuilder();
@@ -31,6 +32,7 @@ public class ReadWrite {
       return sb.toString();
   }
 
+  // Main method taking input from readin
   public static void main(String[] args) {
     Scanner sc = new Scanner(System.in, "utf-8");
     ReadWrite rw = new ReadWrite();

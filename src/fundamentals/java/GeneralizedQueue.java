@@ -1,13 +1,12 @@
 /**
-* Queue.java
+* GeneralizedQueue.java
 * Author: Johan Carlsson
 * Created: 2019-09-04
 * Edited: 2019-08-09
 *
-* The ADT GeneralizedQueue implements a FIFO queue with the API:
+* The ADT GeneralizedQueue implements a generalized queue with the API:
 * prepend, put element in head of queue
-* append, put element in tail of queue
-* get, get element at index
+* insert, put element in tail of queue
 * remove, remove element at index
 * size, returns number of elements in queue
 * isEmpty, returns true if empty
@@ -41,7 +40,7 @@ public class GeneralizedQueue<Item> implements Iterable<Item> {
   /**
   * Puts element in tail position in the queue
   */
-  public void append(Item item) {
+  public void insert(Item item) {
     Node newNode = new Node();
     newNode.item = item;
     if (isEmpty()) {
@@ -57,38 +56,13 @@ public class GeneralizedQueue<Item> implements Iterable<Item> {
   }
 
   /**
-  * Puts element in tail position in the queue
-  */
-  public void prepend(Item item) {
-    Node newNode = new Node();
-    newNode.item = item;
-    if (isEmpty()) {
-      head = newNode;
-      tail = newNode;
-    }
-    else {
-      newNode.prev = head;
-      head.next = newNode;
-      head = newNode;
-    }
-    size++;
-  }
-
-  /**
-  * Get element at index position
-  */
-  public Item get(int index) {
-    Node node = getNode(index);
-    Item returnItem = node.item;
-    return returnItem;
-  }
-
-  /**
   * Remove element in queue at given index
   */
-  public void remove(int index) {
+  public Item remove(int index) {
     Node node = getNode(index);
+    Item returnItem = node.item;
     remove(node);
+    return returnItem;
   }
 
   // Get node at index in queue
@@ -188,15 +162,12 @@ public class GeneralizedQueue<Item> implements Iterable<Item> {
     Scanner sc = new Scanner(System.in, "utf-8");
     GeneralizedQueue<String> q = new GeneralizedQueue<String>();
     while (sc.hasNext()) {
-      q.append(sc.next());
+      q.insert(sc.next());
       System.out.println("Elements in queue:\t\t\t" + q);
       System.out.println("Number of elements in queue:\t\t" + q.size());
     }
-    q.remove(2);
-    System.out.println("Elements in queue:\t\t\t" + q);
-    System.out.println("Number of elements in queue:\t\t" + q.size());
     while (! q.isEmpty()) {
-      System.out.println("Returned element from queue:\t\t" + q.get(1));
+      System.out.println("Returned element from queue:\t\t" + q.remove(1));
       q.remove(1);
       System.out.println("Elements in queue:\t\t\t" + q);
       System.out.println("Number of elements in queue:\t\t" + q.size());
@@ -206,39 +177,35 @@ public class GeneralizedQueue<Item> implements Iterable<Item> {
     GeneralizedQueue<String> testq = new GeneralizedQueue<String>();
     assert(testq.isEmpty() == true);
     assert(testq.size() == 0);
-    testq.append("test1");
+    testq.insert("test1");
     assert(testq.toString().equals("[test1]"));
     assert(testq.isEmpty() == false);
     assert(testq.size() == 1);
-    testq.append("test2");
+    testq.insert("test2");
     assert(testq.toString().equals("[test1, test2]"));
     assert(testq.isEmpty() == false);
     assert(testq.size() == 2);
-    testq.append("test3");
+    testq.insert("test3");
     assert(testq.toString().equals("[test1, test2, test3]"));
     assert(testq.isEmpty() == false);
     assert(testq.size() == 3);
-    assert(testq.get(1).equals("test1"));
-      q.remove(1);
+    assert(testq.remove(1).equals("test1"));
     assert(testq.toString().equals("[test2, test3]"));
     assert(testq.isEmpty() == false);
     assert(testq.size() == 2);
-    testq.append("test1");
+    testq.insert("test1");
     assert(testq.toString().equals("[test2, test3, test1]"));
     assert(testq.isEmpty() == false);
     assert(testq.size() == 3);
-    assert(testq.get(1).equals("test2"));
-      q.remove(1);
+    assert(testq.remove(1).equals("test2"));
     assert(testq.toString().equals("[test3, test1]"));
     assert(testq.isEmpty() == false);
     assert(testq.size() == 2);
-    assert(testq.get(1).equals("test3"));
-      q.remove(1);
+    assert(testq.remove(1).equals("test3"));
     assert(testq.toString().equals("[test1]"));
     assert(testq.isEmpty() == false);
     assert(testq.size() == 1);
-    assert(testq.get(1).equals("test1"));
-      q.remove(1);
+    assert(testq.remove(1).equals("test1"));
     assert(testq.toString().equals("[]"));
     assert(testq.isEmpty() == true);
     assert(testq.size() == 0);
