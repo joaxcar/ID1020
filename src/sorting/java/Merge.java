@@ -1,39 +1,51 @@
 import edu.princeton.cs.algs4.Stopwatch;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdIn;
+import java.lang.reflect.Array;
 
-public class Insertion {
-
+public class Merge {
   public static <T extends Comparable<? super T>> void sort(T[] a) {
-    int size = a.length;
-    int ex = 0;
-    int comp = 0;
-    int min = 0;
-    if (size == 0 || size == 1) {
-      return;
-    }
-
-    for (int j = 1; j < a.length; j++) {
-      comp++;
-      if (less(a[j], a[min])) min = j;
-    }
-    exch(a,0,min);
-
-    for (int i = 1; i < size; i++) {
-      T cur = a[i];
-      int index = i-1;
-      while (less(cur, a[index])) {
-        comp++;
-        a[index+1] = a[index];
-        index--;
-      }
-      ex++;
-      a[index+1] = cur;
-    }
-
-    System.out.println("ex: " + ex);
-    System.out.println("comp: " + comp);
+    @SuppressWarnings("unchecked")
+    T[] aux = (T[]) new Comparable[a.length];
+    sort(a, aux, 0, a.length - 1);
   }
+
+  private static <T extends Comparable<? super T>> void sort(T[] a, T[] aux, int lo, int hi) {
+    if (lo >= hi) return;
+    int mid = lo + (hi - lo) / 2;
+    sort(a, aux, lo, mid);
+    sort(a, aux, mid + 1, hi);
+    merge(a, aux, lo, mid, hi);
+  }
+
+  private static <T extends Comparable<? super T>> void merge(T[] a, T[] aux, int lo, int mid, int hi) {
+    assert isSorted(a, lo, mid);
+    assert isSorted(a, mid + 1, hi);
+
+    for (int k = lo; k <= hi; k++) {
+      aux[k] = a[k];
+    }
+
+    int i = lo;
+    int j = mid + 1;
+    for (int k = lo; k <= hi; k++) {
+      if (i > mid) {
+        a[k] = aux[j++];
+      }
+      else if (j > hi) {
+        a[k] = aux[i++];
+      }
+      else if (less(aux[i], aux[j])) {
+        a[k] = aux[i++];
+      }
+      else {
+        a[k] = aux[j++];
+      }
+    }
+
+    assert isSorted(a, lo, hi);
+  }
+
 
   private static <T extends Comparable<? super T>> boolean less(T v, T w) {
     return v.compareTo(w) < 0;
@@ -45,15 +57,15 @@ public class Insertion {
     a[j] = t;
   }
 
-  private static <T extends Comparable<? super T>> void show(T[] a) {
+  public static <T extends Comparable<? super T>> void show(T[] a) {
     for (int i = 0; i < a.length; i++) {
       StdOut.print(a[i] + " ");
     }
     StdOut.println();
   }
 
-  public static <T extends Comparable<? super T>> boolean isSorted(T[] a) {
-    for (int i = 1; i < a.length; i++) {
+  public static <T extends Comparable<? super T>> boolean isSorted(T[] a, int start, int end) {
+    for (int i = start + 1; i < end; i++) {
       if (less(a[i], a[i - 1])) return false;
     }
     return true;
@@ -76,13 +88,13 @@ public class Insertion {
         Stopwatch sw = new Stopwatch();
         sort(as);
         System.out.println(sw.elapsedTime());
-        assert isSorted(as);
-        //show(as);
+        assert isSorted(as, 0, as.length - 1);
+        show(as);
       }
     } else if (args[0].equals("long")) {
         String[] as = StdIn.readAllStrings();
         sort(as);
-        assert isSorted(as);
+        assert isSorted(as, 0, as.length - 1);
         show(as);
     } else {
         String[] as = StdIn.readAllStrings();
@@ -90,7 +102,7 @@ public class Insertion {
         Stopwatch sw = new Stopwatch();
         sort(ints);
         System.out.println(sw.elapsedTime());
-        assert isSorted(ints);
+        assert isSorted(ints, 0, ints.length - 1);
         //show(ints);
     }
   }

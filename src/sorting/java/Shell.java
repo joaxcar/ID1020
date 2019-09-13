@@ -2,20 +2,24 @@ import edu.princeton.cs.algs4.Stopwatch;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdIn;
 
-public class Selection {
+public class Shell {
 
   public static <T extends Comparable<? super T>> void sort(T[] a) {
     int ex = 0;
     int comp = 0;
-    for (int i = 0; i < a.length; i++) {
-      int index = i;
-      for (int j = i+1; j < a.length; j++) {
-        comp++;
-        if (less(a[j], a[index])) index = j;
+
+    for (int g = a.length / 2; g > 0; g /= 2) {
+      for (int i = g; i < a.length; i += 1) {
+        T cur = a[i];
+        int j = i;
+        while (j >= g && less(cur, a[j - g])) {
+          a[j] = a[j-g];
+          j -= g;
+        }
+        a[j] = cur;
       }
-      ex++;
-      exch(a,i,index);
     }
+
     System.out.println("ex: " + ex);
     System.out.println("comp: " + comp);
   }
@@ -30,7 +34,7 @@ public class Selection {
     a[j] = t;
   }
 
-  private static <T extends Comparable<? super T>> void show(T[] a) {
+  public static <T extends Comparable<? super T>> void show(T[] a) {
     for (int i = 0; i < a.length; i++) {
       StdOut.print(a[i] + " ");
     }
@@ -60,7 +64,7 @@ public class Selection {
         String[] as = a.split(" ");
         sort(as);
         assert isSorted(as);
-        //show(as);
+        show(as);
       }
     } else if (args[0].equals("long")) {
         String[] as = StdIn.readAllStrings();
