@@ -11,11 +11,26 @@ public class Merge {
   }
 
   private static <T extends Comparable<? super T>> void sort(T[] a, T[] aux, int lo, int hi) {
-    if (lo >= hi) return;
+    if (hi - lo < 10) {
+      insertion(a, lo, hi);
+      return;
+    }
     int mid = lo + (hi - lo) / 2;
     sort(a, aux, lo, mid);
     sort(a, aux, mid + 1, hi);
     merge(a, aux, lo, mid, hi);
+  }
+
+  private static <T extends Comparable<? super T>> void insertion(T[] a, int start, int end) {
+    for (int i = start; i <= end; i++) {
+      T cur = a[i];
+      int k = i - 1;
+      while (k >= start && less(cur, a[k])) {
+        a[k + 1] = a[k];
+        k--;
+      }
+      a[k + 1] = cur;
+    }
   }
 
   private static <T extends Comparable<? super T>> void merge(T[] a, T[] aux, int lo, int mid, int hi) {
