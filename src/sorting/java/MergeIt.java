@@ -3,41 +3,27 @@ import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdIn;
 import java.lang.reflect.Array;
 
-public class Merge {
+public class MergeIt {
   public static <T extends Comparable<? super T>> void sort(T[] a) {
     @SuppressWarnings("unchecked")
-    T[] aux = a.clone();
-    sort(aux, a, 0, a.length - 1);
+    T[] aux = (T[]) new Comparable[a.length];
+    sort(a, aux);
   }
 
-  private static <T extends Comparable<? super T>> void sort(T[] a, T[] aux, int lo, int hi) {
-    if (hi - lo < 30) {
-      insertion(aux, lo, hi);
-      return;
-    }
-    int mid = lo + (hi - lo) / 2;
-    sort(aux, a, lo, mid);
-    sort(aux, a, mid + 1, hi);
-    if (!less(a[mid+1], a[mid])) {
-      System.arraycopy(a, lo, aux, lo, hi - lo + 1);
-      return;
-    }
-    merge(a, aux, lo, mid, hi);
-  }
-
-  private static <T extends Comparable<? super T>> void insertion(T[] a, int start, int end) {
-    for (int i = start; i <= end; i++) {
-      T cur = a[i];
-      int k = i - 1;
-      while (k >= start && less(cur, a[k])) {
-        a[k + 1] = a[k];
-        k--;
+  private static <T extends Comparable<? super T>> void sort(T[] a, T[] aux) {
+    int n = a.length; 
+    int last = n - 1;
+    for (int i = 1; i < n; i = 2 * i) {
+      for (int j = 0; j < n; j = j + 2 * i) {
+        int mid = j + i - 1 > last ? last : j + i -1;
+        int hi = j + 2 * i - 1 > last ? last : j + 2 * i - 1;
+        merge(a, aux, j, mid, hi);
       }
-      a[k + 1] = cur;
-    }
+    } 
   }
 
-  private static <T extends Comparable<? super T>> void merge(T[] a, T[] aux, int lo, int mid, int hi) {
+
+  private static <T extends Comparable<? super T>> void merge(T[] a, T[] aux, int lo,  int mid, int hi) {
     assert isSorted(a, lo, mid);
     assert isSorted(a, mid + 1, hi);
 
@@ -49,19 +35,19 @@ public class Merge {
     int j = mid + 1;
     for (int k = lo; k <= hi; k++) {
       if (i > mid) {
-        aux[k] = a[j++];
+        a[k] = aux[j++];
       }
       else if (j > hi) {
-        aux[k] = a[i++];
+        a[k] = aux[i++];
       }
-      else if (less(a[j], a[i])) {
-        aux[k] = a[j++];
+      else if (less(aux[i], aux[j])) {
+        a[k] = aux[i++];
       }
       else {
-        aux[k] = a[i++];
+        a[k] = aux[j++];
       }
     }
-    assert isSorted(aux, lo, hi);
+    assert isSorted(a, lo, hi);
   }
 
   private static <T extends Comparable<? super T>> boolean less(T v, T w) {

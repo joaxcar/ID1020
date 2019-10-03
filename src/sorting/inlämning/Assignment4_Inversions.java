@@ -3,44 +3,47 @@
 * Created: 2019-09-14
 * Edited: 2019-09-16
 *
-* Implementing shell sort
-* 
-* Ex:
-* In: 
-* [ 6 5 4 3 2 1 ]
-* Sort:
-* [ 3 5 4 6 2 1 ]
-* [ 3 2 4 6 5 1 ]
-* [ 3 2 1 6 5 4 ]
-* [ 2 3 1 6 5 4 ]
-* [ 1 2 3 6 5 4 ]
-* [ 1 2 3 6 5 4 ]
-* [ 1 2 3 5 6 4 ]
-* [ 1 2 3 4 5 6 ]
-* [ 1 2 3 4 5 6 ]
+* Implementing shell sort, counting inversions
+* In: [ 1 2 4 3 5 0 ]
+* Out:
+* [0, 1], [5, 0]
+* [1, 2], [5, 0]
+* [2, 4], [3, 3]
+* [2, 4], [5, 0]
+* [3, 3], [5, 0]
+* [4, 5], [5, 0]
+* Number of inversions: 6
 */
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
 
-public class Shell {
+public class ShellInvesions {
+
   /**
   * Sort generic array with shell sort
   */
   public static <T extends Comparable<? super T>> void sort(T[] a) {
-    for (int g = a.length / 2; g > 0; g /= 2) {
+    int swaps = 0;
+    int g = 1;
+    while (g < a.length/3) g = 3*g + 1; 
+
+    while (g > 0) {
       for (int i = g; i < a.length; i += 1) {
         T cur = a[i];
         int j = i;
         while (j >= g && less(cur, a[j - g])) {
-          a[j] = a[j-g];
+          swaps++;
+          exch(a, j, j-g);
+          show(a);
           j -= g;
         }
-        a[j] = cur;
-        show(a);
       }
+      g = g/3;
     }
+
+    System.out.println("Swaps: " + swaps);
   }
 
   // Check if first argument is less than second
@@ -53,6 +56,22 @@ public class Shell {
     T t = a[i];
     a[i] = a[j];
     a[j] = t;
+  }
+
+  /**
+  * Count and print all inversions in the array
+  */
+  public static <T extends Comparable<? super T>> int inversions(T[] a) {
+    int invs = 0;
+    for (int i = 0; i < a.length; i++) {
+      for (int j = i; j < a.length; j++) {
+        if (less(a[j], a[i])) {
+          invs++;
+          System.out.println("[" + i + ", " + a[i] + "], [" + j + ", " + a[j] + "]");
+        }
+      }
+    }
+    return invs;
   }
 
   /*
@@ -87,7 +106,7 @@ public class Shell {
     return ints;
   }
 
-  /*
+ /*
   * Main method used for testing, sorts lists of strings from stdin
   */
   public static void main(String[] args) throws IOException{

@@ -1,28 +1,58 @@
 import edu.princeton.cs.algs4.Stopwatch;
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdIn;
 import java.lang.reflect.Array;
+import java.util.Random;
 
-public class Merge {
+public class Quicksort{
   public static <T extends Comparable<? super T>> void sort(T[] a) {
-    @SuppressWarnings("unchecked")
-    T[] aux = a.clone();
-    sort(aux, a, 0, a.length - 1);
+    shuffleArray(a);;
+    sort(a, 0, a.length -1);
   }
 
-  private static <T extends Comparable<? super T>> void sort(T[] a, T[] aux, int lo, int hi) {
-    if (hi - lo < 30) {
-      insertion(aux, lo, hi);
+  private static  <T extends Comparable<? super T>> void shuffleArray(T[] array)
+  {
+    int index;
+    T temp;
+    Random random = new Random();
+    for (int i = array.length - 1; i > 0; i--)
+      {
+        index = random.nextInt(i + 1);
+        temp = array[index];
+        array[index] = array[i];
+        array[i] = temp;
+      }
+  }
+  private static <T extends Comparable<? super T>> void sort(T[] a, int lo, int hi) {
+    if (hi - lo < 10) {
+      insertion(a, lo, hi);
       return;
     }
-    int mid = lo + (hi - lo) / 2;
-    sort(aux, a, lo, mid);
-    sort(aux, a, mid + 1, hi);
-    if (!less(a[mid+1], a[mid])) {
-      System.arraycopy(a, lo, aux, lo, hi - lo + 1);
+    if (lo >= hi) {
       return;
     }
-    merge(a, aux, lo, mid, hi);
+    int cur = partition(a, lo, hi);
+    sort(a, lo, cur - 1);
+    sort(a, cur + 1, hi);
+  }
+
+  private static <T extends Comparable<? super T>> int partition(T[] a, int lo, int hi) {
+    int cur = hi;
+    int i = lo;
+    int j = hi - 1;
+    while (i <= j) {
+      if (less(a[i], a[cur])) {
+        i++;
+      } else {
+        exch(a, i, j);
+        j--;
+      }
+    }
+    exch(a, ++j, cur);
+    return j;
   }
 
   private static <T extends Comparable<? super T>> void insertion(T[] a, int start, int end) {
@@ -37,33 +67,6 @@ public class Merge {
     }
   }
 
-  private static <T extends Comparable<? super T>> void merge(T[] a, T[] aux, int lo, int mid, int hi) {
-    assert isSorted(a, lo, mid);
-    assert isSorted(a, mid + 1, hi);
-
-    for (int k = lo; k <= hi; k++) {
-      aux[k] = a[k];
-    }
-
-    int i = lo;
-    int j = mid + 1;
-    for (int k = lo; k <= hi; k++) {
-      if (i > mid) {
-        aux[k] = a[j++];
-      }
-      else if (j > hi) {
-        aux[k] = a[i++];
-      }
-      else if (less(a[j], a[i])) {
-        aux[k] = a[j++];
-      }
-      else {
-        aux[k] = a[i++];
-      }
-    }
-    assert isSorted(aux, lo, hi);
-  }
-
   private static <T extends Comparable<? super T>> boolean less(T v, T w) {
     return v.compareTo(w) < 0;
   }
@@ -76,7 +79,7 @@ public class Merge {
 
   public static <T extends Comparable<? super T>> void show(T[] a) {
     for (int i = 0; i < a.length; i++) {
-      StdOut.print(a[i] + " ");
+      StdOut.println(a[i]);
     }
     StdOut.println();
   }
@@ -97,7 +100,7 @@ public class Merge {
     return ints;
   }
 
-  public static void main(String[] args) {
+  public static void main(String[] args)  throws IOException{
     if (args[0].equals("short")) {
       while (StdIn.hasNextLine()) {
         String a = StdIn.readLine();
@@ -114,13 +117,19 @@ public class Merge {
         assert isSorted(as, 0, as.length - 1);
         show(as);
     } else {
-        String[] as = StdIn.readAllStrings();
-        Integer[] ints = useInt(as);
-        Stopwatch sw = new Stopwatch();
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in, "utf-8"));
+        String line = in.readLine();
+        int size = Integer.parseInt(line);
+        Integer[] ints = new Integer[size];
+        for (int i = 0; i < size; i++) {
+          line = in.readLine();
+          if (line != null) {
+            ints[i] = Integer.parseInt(line);
+          }
+        }
         sort(ints);
-        System.out.println(sw.elapsedTime());
         assert isSorted(ints, 0, ints.length - 1);
-        //show(ints);
+        show(ints);
     }
   }
 }

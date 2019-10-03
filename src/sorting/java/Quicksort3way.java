@@ -1,28 +1,56 @@
 import edu.princeton.cs.algs4.Stopwatch;
+import java.util.Random;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdIn;
 import java.lang.reflect.Array;
 
-public class Merge {
+public class Quicksort3way {
   public static <T extends Comparable<? super T>> void sort(T[] a) {
-    @SuppressWarnings("unchecked")
-    T[] aux = a.clone();
-    sort(aux, a, 0, a.length - 1);
+    shuffleArray(a);
+    sort(a, 0, a.length -1);
   }
 
-  private static <T extends Comparable<? super T>> void sort(T[] a, T[] aux, int lo, int hi) {
-    if (hi - lo < 30) {
-      insertion(aux, lo, hi);
+  private static <T extends Comparable<? super T>> void sort(T[] a, int lo, int hi) {
+    if (hi - lo < 30){
+      insertion(a, lo, hi);
       return;
     }
-    int mid = lo + (hi - lo) / 2;
-    sort(aux, a, lo, mid);
-    sort(aux, a, mid + 1, hi);
-    if (!less(a[mid+1], a[mid])) {
-      System.arraycopy(a, lo, aux, lo, hi - lo + 1);
+    if (lo >= hi) {
       return;
     }
-    merge(a, aux, lo, mid, hi);
+    T cur = a[lo];
+    int lt = lo;
+    int i = lo;
+    int gt = hi;
+    while (i <= gt) {
+      int cmp = a[i].compareTo(cur);
+      if (cmp < 0) {
+        exch(a, i, lt);
+        lt++;
+        i++;
+      } else if (cmp > 0) {
+        exch(a, i, gt);
+        gt--;
+      } else {
+        i++;
+      }
+    }
+    sort(a, lo, lt - 1);
+    sort(a, gt + 1, hi);
+  }
+
+  private static  <T extends Comparable<? super T>> void shuffleArray(T[] array)
+  {
+    int index;
+    T temp;
+    Random random = new Random();
+    for (int i = array.length - 1; i > 0; i--)
+      {
+        index = random.nextInt(i + 1);
+        temp = array[index];
+        array[index] = array[i];
+        array[i] = temp;
+      }
   }
 
   private static <T extends Comparable<? super T>> void insertion(T[] a, int start, int end) {
@@ -37,33 +65,7 @@ public class Merge {
     }
   }
 
-  private static <T extends Comparable<? super T>> void merge(T[] a, T[] aux, int lo, int mid, int hi) {
-    assert isSorted(a, lo, mid);
-    assert isSorted(a, mid + 1, hi);
-
-    for (int k = lo; k <= hi; k++) {
-      aux[k] = a[k];
-    }
-
-    int i = lo;
-    int j = mid + 1;
-    for (int k = lo; k <= hi; k++) {
-      if (i > mid) {
-        aux[k] = a[j++];
-      }
-      else if (j > hi) {
-        aux[k] = a[i++];
-      }
-      else if (less(a[j], a[i])) {
-        aux[k] = a[j++];
-      }
-      else {
-        aux[k] = a[i++];
-      }
-    }
-    assert isSorted(aux, lo, hi);
-  }
-
+  // Check if first argument is less than second
   private static <T extends Comparable<? super T>> boolean less(T v, T w) {
     return v.compareTo(w) < 0;
   }
